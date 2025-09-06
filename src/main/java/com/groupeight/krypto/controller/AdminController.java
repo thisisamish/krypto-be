@@ -26,9 +26,15 @@ import lombok.RequiredArgsConstructor;
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminController {
-	
+
 	private final ProductService productService;
-	
+
+	@PostMapping("/")
+	public ResponseEntity<?> addAdmin() {
+//		TODO: DO this
+		return null;
+	}
+
 	@PostMapping("/products")
 	@Operation(summary = "Create a new product. Requires ADMIN role.")
 	@SecurityRequirement(name = "cookieAuth")
@@ -38,14 +44,10 @@ public class AdminController {
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/products/{id}")
-	@Operation(summary = "Update an existing product. Requires ADMIN role.")
-	@SecurityRequirement(name = "cookieAuth")
-	public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id,
-			@Valid @RequestBody ProductRequestDto dto) {
-		ProductResponseDto updatedProduct = productService.updateProduct(id, dto);
-
-		return ResponseEntity.ok(updatedProduct);
+	@DeleteMapping("/")
+	public ResponseEntity<Void> deleteAdmin() {
+//		TODO: Do this
+		return null;
 	}
 
 	@DeleteMapping("/products/{id}")
@@ -56,28 +58,26 @@ public class AdminController {
 
 		return ResponseEntity.noContent().build();
 	}
-	
-	@PostMapping("/")
-	public ResponseEntity<?> addAdmin() {
-//		TODO: DO this
+
+	@GetMapping("/users")
+	public ResponseEntity<?> getAllUsers() {
+//		TODO: Can get all users or all logged in users
 		return null;
 	}
-	
+
 	@PutMapping("/")
 	public ResponseEntity<?> updateAdmin() {
 //		TODO: Do this
 		return null;
 	}
-	
-	@DeleteMapping("/")
-	public ResponseEntity<Void> deleteAdmin() {
-//		TODO: Do this
-		return null;
-	}
-	
-	@GetMapping("/users")
-	public ResponseEntity<?> getAllUsers() {
-//		TODO: Can get all users or all logged in users
-		return null;
+
+	@PutMapping("/products/{id}")
+	@Operation(summary = "Update an existing product. Requires ADMIN role.")
+	@SecurityRequirement(name = "cookieAuth")
+	public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id,
+			@Valid @RequestBody ProductRequestDto dto) {
+		ProductResponseDto updatedProduct = productService.updateProduct(id, dto);
+
+		return ResponseEntity.ok(updatedProduct);
 	}
 }

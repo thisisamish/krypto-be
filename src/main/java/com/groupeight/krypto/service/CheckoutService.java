@@ -4,5 +4,5 @@ import com.groupeight.krypto.dto.CheckoutRequestDto;
 import com.groupeight.krypto.dto.OrderResponseDto;
 
 public interface CheckoutService {
-    OrderResponseDto placeOrder(Long userId, CheckoutRequestDto request);
+	OrderResponseDto placeOrder(Long userId, CheckoutRequestDto request);
 }

@@ -5,11 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CartItemRequestDto {
-    @NotNull
-    private Long productId;
+	@NotNull
+	private Long productId;
 
-    @Min(1)
-    private int quantity;
+	@Min(1)
+	private int quantity;
 }

@@ -1,11 +1,12 @@
 package com.groupeight.krypto.service;
 
-import com.groupeight.krypto.model.PaymentMethod;
-
 import java.math.BigDecimal;
 
-public interface PaymentService {
-    PaymentResult charge(PaymentMethod method, BigDecimal amount);
+import com.groupeight.krypto.model.PaymentMethod;
 
-    record PaymentResult(boolean success, String reference, String message) {}
+public interface PaymentService {
+	record PaymentResult(boolean success, String reference, String message) {
+	}
+
+	PaymentResult charge(PaymentMethod method, BigDecimal amount);
 }

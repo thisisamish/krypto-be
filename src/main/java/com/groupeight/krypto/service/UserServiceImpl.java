@@ -14,15 +14,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
+	@Override
 	public void registerUser(UserRegistrationRequestDto dto) throws UserAlreadyExistsException {
 		if (userRepository.findByUsername(dto.username()).isPresent()) {
 			throw new UserAlreadyExistsException("Username " + dto.username() + " is already taken.");
 		}
-		
+
 		User newUser = new User();
 		newUser.setUsername(dto.username());
 		newUser.setPassword(passwordEncoder.encode(dto.password()));

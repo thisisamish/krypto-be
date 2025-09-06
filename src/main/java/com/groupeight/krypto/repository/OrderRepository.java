@@ -1,20 +1,21 @@
 package com.groupeight.krypto.repository;
 
-import com.groupeight.krypto.model.Order;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.groupeight.krypto.model.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Page<Order> findByUserId(Long userId, Pageable pageable);
+	Optional<Order> findByOrderNumber(String orderNumber);
 
-    Optional<Order> findByOrderNumberAndUserId(String orderNumber, Long userId);
+	Optional<Order> findByOrderNumberAndUserId(String orderNumber, Long userId);
 
-    @EntityGraph(attributePaths = "items")
-    Optional<Order> findWithItemsByOrderNumberAndUserId(String orderNumber, Long userId);
+	Page<Order> findByUserId(Long userId, Pageable pageable);
 
-    Optional<Order> findByOrderNumber(String orderNumber);
+	@EntityGraph(attributePaths = "items")
+	Optional<Order> findWithItemsByOrderNumberAndUserId(String orderNumber, Long userId);
 }

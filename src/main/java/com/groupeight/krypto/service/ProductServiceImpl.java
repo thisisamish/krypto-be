@@ -17,7 +17,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
+	public static Product toEntity(ProductRequestDto dto) {
+		Product product = new Product();
+		product.setName(dto.name());
+		product.setDescription(dto.description());
+		product.setPrice(dto.price());
+		product.setStockQuantity(dto.stockQuantity());
+		product.setImageUrl(dto.imageUrl());
+
+		return product;
+	}
+
 	private final ProductRepository productRepository;
+
+	@Override
+	public ProductResponseDto createProduct(ProductRequestDto dto) {
+		Product productToSave = toEntity(dto);
+		Product savedProduct = productRepository.save(productToSave);
+
+		return ProductResponseDto.fromEntity(savedProduct);
+	}
+
+	@Override
+	public void deleteProduct(Long id) {
+		if (!productRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Product with ID: " + id + " not found.");
+		}
+		productRepository.deleteById(id);
+	}
 
 	@Override
 	public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
@@ -30,14 +57,6 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponseDto getProductById(Long id) {
 		return ProductResponseDto.fromEntity(productRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Product with ID " + id + " not found.")));
-	}
-
-	@Override
-	public ProductResponseDto createProduct(ProductRequestDto dto) {
-		Product productToSave = toEntity(dto);
-		Product savedProduct = productRepository.save(productToSave);
-
-		return ProductResponseDto.fromEntity(savedProduct);
 	}
 
 	@Override
@@ -54,24 +73,5 @@ public class ProductServiceImpl implements ProductService {
 		Product updatedProduct = productRepository.save(existingProduct);
 
 		return ProductResponseDto.fromEntity(updatedProduct);
-	}
-
-	@Override
-	public void deleteProduct(Long id) {
-		if (!productRepository.existsById(id)) {
-			throw new ResourceNotFoundException("Product with ID: " + id + " not found.");
-		}
-		productRepository.deleteById(id);
-	}
-	
-	public static Product toEntity(ProductRequestDto dto) {
-		Product product = new Product();
-		product.setName(dto.name());
-		product.setDescription(dto.description());
-		product.setPrice(dto.price());
-		product.setStockQuantity(dto.stockQuantity());
-		product.setImageUrl(dto.imageUrl());
-
-		return product;
 	}
 }

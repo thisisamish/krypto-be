@@ -24,15 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Endpoints for user login and logout")
 public class AuthController {
-	
+
 	private final UserService userService;
-	
-	@Operation(summary = "Register User", description = "Registers a user (CUSTOMER role only).")
-	@PostMapping(value = "/register")
-	public ResponseEntity<Void> register(@Valid @RequestBody UserRegistrationRequestDto dto) {
-		userService.registerUser(dto);
-		return ResponseEntity.noContent().build();
-	}
 
 	@Operation(summary = "User Login", description = "Authenticates a user and establishes a session. Use this endpoint first to get a session cookie.", responses = {
 			@ApiResponse(description = "Login successful", responseCode = "200"),
@@ -50,5 +43,12 @@ public class AuthController {
 	public void logout() {
 		throw new IllegalStateException(
 				"This method should not be called. It's for Swagger documentation purposes only.");
+	}
+
+	@Operation(summary = "Register User", description = "Registers a user (CUSTOMER role only).")
+	@PostMapping(value = "/register")
+	public ResponseEntity<Void> register(@Valid @RequestBody UserRegistrationRequestDto dto) {
+		userService.registerUser(dto);
+		return ResponseEntity.noContent().build();
 	}
 }
