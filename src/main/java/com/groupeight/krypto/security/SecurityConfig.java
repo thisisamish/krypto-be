@@ -1,6 +1,7 @@
 package com.groupeight.krypto.security;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -45,8 +47,17 @@ public class SecurityConfig {
 						.hasAnyRole("ADMIN", "CUSTOMER").anyRequest().authenticated())
 				.formLogin(form -> form.loginProcessingUrl("/api/v1/auth/login").successHandler((req, resp, auth) -> {
 					resp.setStatus(HttpServletResponse.SC_OK);
-					resp.getWriter().write("{\"message\":\"Login successful\"}");
 					resp.setContentType("application/json");
+
+					Object principal = auth.getPrincipal();
+					String role = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+							.collect(Collectors.joining());
+
+					String jsonResp = String.format(
+							"{\"message\":\"Login successful\", \"username\":\"%s\",\"role\":\"%s\"}", auth.getName(),
+							role);
+					resp.getWriter().write(jsonResp);
+					resp.getWriter().flush();
 				}).failureHandler((req, resp, ex) -> {
 					resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					resp.setContentType("application/json");

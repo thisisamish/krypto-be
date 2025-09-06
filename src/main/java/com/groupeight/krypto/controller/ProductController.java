@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Tag(name = "Product Management", description = "APIs for CRUD on products. The 'unlocked lock' icon in front of the endpoints indicates that they require authorization.")
 public class ProductController {
@@ -38,7 +38,7 @@ public class ProductController {
 
 	private final ProductService productService;
 
-	@GetMapping("/products")
+	@GetMapping("/")
 	@PageableAsQueryParam
 	@PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 	@Operation(summary = "Get a paginated and sorted list of all products. Requires ADMIN or CUSTOMER role.")
@@ -47,43 +47,12 @@ public class ProductController {
 		return ResponseEntity.ok(productService.getAllProducts(pageable));
 	}
 
-	@GetMapping("/products/{id}")
+	@GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 	@Operation(summary = "Get a single product by its ID. Requires ADMIN or CUSTOMER role.")
 	@SecurityRequirement(name = "cookieAuth")
 	public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
 		return ResponseEntity.ok(productService.getProductById(id));
-	}
-
-	@PostMapping("/admin/products")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(summary = "Create a new product. Requires ADMIN role.")
-	@SecurityRequirement(name = "cookieAuth")
-	public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody ProductRequestDto dto) {
-		ProductResponseDto createdProduct = productService.createProduct(dto);
-
-		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
-	}
-
-	@PutMapping("/admin/products/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(summary = "Update an existing product. Requires ADMIN role.")
-	@SecurityRequirement(name = "cookieAuth")
-	public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id,
-			@Valid @RequestBody ProductRequestDto dto) {
-		ProductResponseDto updatedProduct = productService.updateProduct(id, dto);
-
-		return ResponseEntity.ok(updatedProduct);
-	}
-
-	@DeleteMapping("/admin/products/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(summary = "Delete a product. Requires ADMIN role.")
-	@SecurityRequirement(name = "cookieAuth")
-	public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-		productService.deleteProduct(id);
-
-		return ResponseEntity.noContent().build();
 	}
 }
 
