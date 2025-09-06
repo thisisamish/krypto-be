@@ -1,11 +1,15 @@
 package com.groupeight.krypto.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.groupeight.krypto.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 
-@Repository
+import java.util.Optional;
+import jakarta.persistence.LockModeType;
+
 public interface ProductRepository extends JpaRepository<Product, Long> {
+	Optional<Product> findByName(String name);
 
+	@Lock(LockModeType.OPTIMISTIC)
+	Optional<Product> findWithLockById(Long id);
 }

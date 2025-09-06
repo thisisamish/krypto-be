@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,7 +43,10 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(AbstractHttpConfigurer::disable)
+		http.cors(cors -> {
+		}).csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+				.ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/logout"))
 				.authorizeHttpRequests(auth -> auth.requestMatchers(WHITELIST).permitAll()
 						.requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
 						.requestMatchers("/api/v1/admin/**").hasRole("ADMIN").requestMatchers("/api/v1/products/**")
@@ -75,19 +81,21 @@ public class SecurityConfig {
 					resp.setStatus(HttpServletResponse.SC_OK);
 				})).headers(headers -> headers.frameOptions().disable());
 
+		http.addFilterAfter(new com.groupeight.krypto.security.CsrfCookieFilter(), CsrfFilter.class);
+
 		return http.build();
 	}
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
+	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowedOrigins(List.of("http://localhost:4200"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN", "X-Requested-With", "Accept"));
 		config.setAllowCredentials(true);
-
+		config.setExposedHeaders(List.of("Set-Cookie"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/api/**", config);
-
+		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
 

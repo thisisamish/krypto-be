@@ -1,11 +1,14 @@
 package com.groupeight.krypto.repository;
 
-import java.util.Optional;
-
+import com.groupeight.krypto.model.Cart;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.groupeight.krypto.model.Cart;
+import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 	Optional<Cart> findByUserId(Long userId);
+
+	@EntityGraph(attributePaths = "items")
+	Optional<Cart> findWithItemsByUserId(Long userId);
 }
