@@ -2,7 +2,9 @@ package com.groupeight.krypto.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Product implements Serializable {
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +43,7 @@ public class Product implements Serializable {
 
 	@Column(nullable = false, precision = 10, scale = 2)
 	private BigDecimal price;
-
+	
 	private String size;
 
 	@Column(name = "stock_quantity", nullable = false)
@@ -56,7 +59,7 @@ public class Product implements Serializable {
 	@UpdateTimestamp
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
-
+	
 	@Version
 	private Long version;
 }
