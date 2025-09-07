@@ -7,6 +7,5 @@ INSERT INTO products (name, description, price, stock_quantity, image_url) VALUE
 -- Ensure version is non-null to keep Hibernate happy
 UPDATE products SET version = 0 WHERE version IS NULL;
 
-INSERT INTO users (id, username, password, email, role, is_super_admin, created_at) VALUES
-+  ('00000000-0000-0000-0000-000000000001', 'superadmin', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'superadmin@example.com', 'ADMIN', TRUE, CURRENT_TIMESTAMP());
-INSERT INTO users (userName, password, email, user_role) VALUES ('thisisamish', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'thisisamish@example.com', 'CUSTOMER');
+INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('superadmin', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'superadmin@example.com', 'ADMIN', TRUE, CURRENT_TIMESTAMP());
+INSERT INTO users (userName, password, email, user_role,  is_super_admin, created_at) VALUES ('thisisamish', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'thisisamish@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());

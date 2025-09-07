@@ -68,15 +68,6 @@ public class AdminUserServiceImpl implements AdminUserService {
             throw new IllegalStateException("Superadmin cannot be deleted");
         }
 
-        // Detach orders: preserve usernameSnapshot and null user ref
-        for (Order o : orderRepository.findByUserId(userId)) {
-            if (o.getUsernameSnapshot() == null) {
-                o.setUsernameSnapshot(u.getUsername());
-            }
-            o.setUser(null);
-        }
-        orderRepository.flush();
-
         userRepository.delete(u);
     }
 
