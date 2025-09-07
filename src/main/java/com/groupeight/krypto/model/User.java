@@ -1,91 +1,77 @@
 package com.groupeight.krypto.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "users")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class User implements UserDetails, Serializable {
+@Table(name = "users")
+public class User extends BaseEntity implements UserDetails, Serializable {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false, unique = true)
 	private String username;
 
-	@Column(name = "first_name")
-	private String firstName;
-
-	@Column(name = "middle_name")
-	private String middleName;
-
-	@Column(name = "last_name")
-	private String lastName;
-
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)
 	private String password;
 
-	private String address;
-
-	@Column(name = "contact_no", length = 10)
-	private String contactNo;
-
 	@Enumerated(EnumType.STRING)
-	@Column(name = "user_role", nullable = false)
+	@Column(name = "user_role", nullable = false, length = 16)
 	private UserRole userRole;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Column(name = "is_superadmin", nullable = false)
+	private boolean superadmin = false;
+
+	@Column(name = "is_active", nullable = false)
+	private boolean active = true;
+
+	@Column(name = "last_login_at")
+	private Instant lastLoginAt;
+
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 	private Cart cart;
-
-	@CreationTimestamp
-	@Column(name = "created_at", updatable = false)
-	private LocalDateTime createdAt;
-
-	@UpdateTimestamp
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_" + userRole.name()));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return active;
+	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
