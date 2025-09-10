@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
 		newUser.setLastName(dto.lastName());
 		newUser.setUsername(dto.username());
 		newUser.setAddress(dto.address());
+		newUser.setEmail(dto.email());
+		newUser.setIsSuperAdmin(false);
 		newUser.setUserRole(UserRole.CUSTOMER);
+		
+		userRepository.save(newUser);
 	}
 }

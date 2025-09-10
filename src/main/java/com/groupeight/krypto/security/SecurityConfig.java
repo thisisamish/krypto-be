@@ -78,7 +78,7 @@ public class SecurityConfig {
 		http.cors(cors -> {
 		}).csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-				.ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/logout"))
+				.ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/logout", "/api/v1/auth/register"))
 				.authorizeHttpRequests(auth -> auth.requestMatchers(WHITELIST).permitAll()
 						.requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
 						.requestMatchers("/api/v1/admin/**").hasRole("ADMIN").requestMatchers("/api/v1/products/**")
