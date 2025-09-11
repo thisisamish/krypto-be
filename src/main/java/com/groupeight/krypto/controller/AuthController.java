@@ -1,13 +1,20 @@
 package com.groupeight.krypto.controller;
 
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.groupeight.krypto.dto.CurrentUserDto;
 import com.groupeight.krypto.dto.UserRegistrationRequestDto;
 import com.groupeight.krypto.service.UserService;
 
@@ -26,6 +33,23 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final UserService userService;
+
+	@Operation(summary = "Get Current User", description = "Checks the current session and returns the logged-in user's details.", responses = {
+			@ApiResponse(description = "User is authenticated", responseCode = "200"),
+			@ApiResponse(description = "User is not authenticated", responseCode = "401", content = @Content) })
+	@GetMapping("/me")
+	public ResponseEntity<CurrentUserDto> getCurrentUser(Authentication authentication) {
+		if (authentication == null || !authentication.isAuthenticated()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		String username = authentication.getName();
+		String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+				.collect(Collectors.joining(","));
+
+		CurrentUserDto currentUser = new CurrentUserDto(username, role);
+		return ResponseEntity.ok(currentUser);
+	}
 
 	@Operation(summary = "User Login", description = "Authenticates a user and establishes a session. Use this endpoint first to get a session cookie.", responses = {
 			@ApiResponse(description = "Login successful", responseCode = "200"),

@@ -48,6 +48,9 @@ public class Product implements Serializable {
 
 	@Column(name = "stock_quantity", nullable = false)
 	private int stockQuantity;
+	
+	@Column(name = "discount_percent")
+	private BigDecimal discountPercent;
 
 	@Column(name = "image_url")
 	private String imageUrl;

@@ -27,11 +27,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "Product Management", description = "APIs for CRUD on products. The 'unlocked lock' icon in front of the endpoints indicates that they require authorization.")
 public class ProductController {
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	private final ProductService productService;
 
-	@GetMapping("/")
+	@GetMapping
 	@PageableAsQueryParam
 	@PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 	@Operation(summary = "Get a paginated and sorted list of all products. Requires ADMIN or CUSTOMER role.")
