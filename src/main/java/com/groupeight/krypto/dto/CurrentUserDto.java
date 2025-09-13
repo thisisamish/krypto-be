@@ -14,4 +14,7 @@ public class CurrentUserDto {
 
     @Schema(description = "The role of the logged-in user", example = "ROLE_CUSTOMER")
     String role;
+    
+    @Schema(description = "The first name of the logged-in user", example = "Amish")
+    String firstName;
 }

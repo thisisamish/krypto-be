@@ -5,11 +5,11 @@ INSERT INTO users (username, password, email, user_role, is_super_admin, created
 INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('admin2', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'admin2@example.com', 'ADMIN', FALSE, CURRENT_TIMESTAMP());
 
 -- Customers
-INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('amishverma', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'amishverma@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
-INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('akanksha', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'akanksha@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
-INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('talhakhan', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'talhakhan@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
-INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('govindsingh', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'govindsingh@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
-INSERT INTO users (username, password, email, user_role, is_super_admin, created_at) VALUES ('nileshpunj', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'nileshpunj@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
+INSERT INTO users (username, first_name, password, email, user_role, is_super_admin, created_at) VALUES ('amishverma', 'Amish', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'amishverma@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
+INSERT INTO users (username, first_name, password, email, user_role, is_super_admin, created_at) VALUES ('akanksha', 'Akanksha', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'akanksha@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
+INSERT INTO users (username, first_name, password, email, user_role, is_super_admin, created_at) VALUES ('talhakhan', 'Talha', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'talhakhan@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
+INSERT INTO users (username, first_name, password, email, user_role, is_super_admin, created_at) VALUES ('govindsingh', 'Govind', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'govindsingh@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
+INSERT INTO users (username, first_name, password, email, user_role, is_super_admin, created_at) VALUES ('nileshpunj', 'Nilesh', '$2a$12$4L3PlSSdbSXSkSJZIpeQl.San2p9Juw4EKF3/Tn0pcx3pKrdS1D.q', 'nileshpunj@example.com', 'CUSTOMER', FALSE, CURRENT_TIMESTAMP());
 
 -- Products
 INSERT INTO products (name, description, size, price, stock_quantity, discount_percent, image_url) VALUES ('Amul Pasteurised Butter', 'Amul Pasteurised Butter 100 g', '100 g', 62.00, 100, 10, 'https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_200/emujgakbhef20bicfyn3');

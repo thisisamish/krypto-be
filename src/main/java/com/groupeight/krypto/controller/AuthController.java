@@ -46,8 +46,14 @@ public class AuthController {
 		String username = authentication.getName();
 		String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
+		
+		String firstName = "";
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof com.groupeight.krypto.security.AppUserDetails aud) {
+            firstName = aud.getFirstName();
+        }
 
-		CurrentUserDto currentUser = new CurrentUserDto(username, role);
+		CurrentUserDto currentUser = new CurrentUserDto(username, role, firstName);
 		return ResponseEntity.ok(currentUser);
 	}
 

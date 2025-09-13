@@ -1,5 +1,6 @@
 package com.groupeight.krypto.security;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groupeight.krypto.service.UserDetailsServiceImpl;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -87,26 +89,33 @@ public class SecurityConfig {
 					resp.setStatus(HttpServletResponse.SC_OK);
 					resp.setContentType("application/json");
 
-					Object principal = auth.getPrincipal();
 					String role = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 							.collect(Collectors.joining());
 
-					String jsonResp = String.format(
-							"{\"message\":\"Login successful\", \"username\":\"%s\",\"role\":\"%s\"}", auth.getName(),
-							role);
-					resp.getWriter().write(jsonResp);
-					resp.getWriter().flush();
+					String firstName = "";
+					Object principal = auth.getPrincipal();
+					if (principal instanceof com.groupeight.krypto.security.AppUserDetails aud) {
+						firstName = aud.getFirstName();
+					}
+
+					var body = new LinkedHashMap<String, Object>();
+					body.put("message", "Login successful");
+					body.put("username", auth.getName());
+					body.put("role", role);
+					body.put("firstName", firstName);
+
+					new ObjectMapper().writeValue(resp.getWriter(), body);
 				}).failureHandler((req, resp, ex) -> {
 					resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					resp.setContentType("application/json");
-
 					String errorMessage = "Authentication failed. Please check your credentials.";
 					if (ex instanceof org.springframework.security.authentication.BadCredentialsException) {
 						errorMessage = "Invalid username or password.";
 					} else if (ex instanceof org.springframework.security.authentication.DisabledException) {
 						errorMessage = "User account is disabled.";
 					}
-					resp.getWriter().write("{\"error\":\"" + errorMessage + "\"}");
+					new com.fasterxml.jackson.databind.ObjectMapper().writeValue(resp.getWriter(),
+							java.util.Map.of("error", errorMessage));
 				}))
 				.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				.logout(logout -> logout.logoutUrl("/api/v1/auth/logout").logoutSuccessHandler((req, resp, auth) -> {
